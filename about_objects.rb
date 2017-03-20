@@ -38,7 +38,8 @@ class AboutObjects < Neo::Koan
 
     # THINK ABOUT IT:
     # What pattern do the object IDs for small integers follow?
-    # double the Object and then add one maaaaaaaaaate!
+    # double the Object and then add one maaaaaaaaaate! this way it is always going
+    # to be an odd number! Something about Hilbert's paradox of the Grand Hotel
   end
 
   def test_clone_creates_a_different_object

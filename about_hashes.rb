@@ -26,12 +26,18 @@ class AboutHashes < Neo::Koan
     assert_raise(KeyError) do
       hash.fetch(:doesnt_exist)
     end
+  end
 
     # THINK ABOUT IT:
     #
     # Why might you want to use #fetch instead of #[] when accessing hash keys?
-    # WHY JAMIE?
-  end
+    ### Each one should be used as the situation requires, but #fetch is very
+    ### feature-rich and can handle many cases depending on how it's used.
+    ### For that reason I tend to prefer it over accessing keys with #[].
+
+    ### fetch(key_name): get the value if the key exists, raise a KeyError if it doesn't
+    ### fetch(key_name, default_value): get the value if the key exists, return default_value otherwise
+    ### fetch(key_name) { |key| "default" }: get the value if the key exists, otherwise run the supplied block and return the value.
 
   def test_changing_hashes
     hash = { :one => "uno", :two => "dos" }
@@ -103,6 +109,9 @@ class AboutHashes < Neo::Koan
 
     assert_equal true, hash[:one].object_id == hash[:two].object_id
   end
+
+  #### hash[:one] << "uno"
+  ### :one doesn't exist! it just reads out the array mate! 
 
   def test_default_value_with_block
     hash = Hash.new {|hash, key| hash[key] = [] }

@@ -40,6 +40,14 @@ class AboutSymbols < Neo::Koan
   # so "open".object_id != "open".object_id
   # but :open.object_id == :open.object_id
 
+  # To create a symbole instance, you can't do Symbol.new(). Instead, we do :word
+
+  # Difference b/w string and symbol is that symbol is immutable (can't be changed)
+  # But string can become immutable too by attaching .freeze to the symbol dude!
+
+  # When should you use symbols?
+  # 
+
   def test_method_names_become_symbols
     symbols_as_strings = Symbol.all_symbols.map { |x| x.to_s }
     assert_equal true, symbols_as_strings.include?("test_method_names_become_symbols")

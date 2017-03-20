@@ -5,6 +5,8 @@ class AboutNil < Neo::Koan
     assert_equal true, nil.is_a?(Object), "Unlike NULL in other languages"
   end
 
+  ### Everything in Ruby is an object. ###
+
   def test_you_dont_get_null_pointer_errors_when_calling_methods_on_nil
     # What happens when you call a method that doesn't exist.  The
     # following begin/rescue/end code block captures the exception and
@@ -33,6 +35,9 @@ class AboutNil < Neo::Koan
     # or
     #    obj == nil
     # Why?
+
+    ### obj.nil? is better due to it being more readable and more efficient
+    ### in terms of computational strain. obj.nil? is also in a more Ruby format. 
   end
 
 end
