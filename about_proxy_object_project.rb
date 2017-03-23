@@ -12,61 +12,70 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 # missing handler and any other supporting methods.  The specification
 # of the Proxy class is given in the AboutProxyObjectProject koan.
 
+# class Proxy
+#   attr_reader :messages   # return an array of messages called
+#
+#   def initialize(target_object)
+#     @object = target_object
+#     @methods_called = Hash.new(0);
+#     @messages = [] # Array for storing the message names
+#
+#     # For each of the object's methods
+#     methods_to_forward = @object.methods - [:__send__, :object_id, :instance_of?, :method_missing]
+#     methods_to_forward.each do |method|
+#         eval """ def #{method}(*args, &block)
+#                     @methods_called[:#{method}] += 1
+#                     @messages.push :#{method}
+#                     @object.send(:#{method}, *args, &block)
+#                  end
+#              """
+#     end
+#   end
+#
+#   def called? method
+#     number_of_times_called(method) > 0
+#   end
+#
+#   def number_of_times_called(method)
+#     @methods_called[method]
+#   end
+# end
+
+
 class Proxy
-  attr_reader :messages   # return an array of messages called
 
   def initialize(target_object)
     @object = target_object
-    @methods_called = Hash.new(0);
-    @messages = [] # Array for storing the message names
+    @messages = []
+  end
 
-    # For each of the object's methods
-    methods_to_forward = @object.methods - [:__send__, :object_id, :instance_of?, :method_missing]
-    methods_to_forward.each do |method|
-        eval """ def #{method}(*args, &block)
-                    @methods_called[:#{method}] += 1
-                    @messages.push :#{method}
-                    @object.send(:#{method}, *args, &block)
-                 end
-             """
+  attr_accessor :target_object, :messages
+
+#I get this..yay!
+  def called?(method_name)
+    @messages.include? method_name
+  end
+
+#I get this..yay!
+  def number_of_times_called(method_name)
+    @messages.count method_name
+  end
+
+#wtfudge?
+
+  def method_missing(method_name, *args, &block)
+    if @object.respond_to? method_name then
+      # track each method called that target object can respond to
+      @messages.push method_name
+
+      # call the method!
+      @object.send method_name, *args
+    else
+      # all other cases: default behavior (raises NoMethodError)
+      raise NoMethodError
     end
   end
-
-  def called? method
-    number_of_times_called(method) > 0
-  end
-
-  def number_of_times_called(method)
-    @methods_called[method]
-  end
 end
-
-
-# class Proxy
-#
-#   def initialize(target_object)
-#     @target_object = target_object
-#     @messages = []
-#   end
-#
-#   attr_accessor :target_object, :messages
-#
-# #I get this
-#   def called?(method_name)
-#     @messages.include? method_name
-#   end
-#
-# #I get this
-#   def number_of_times_called(method_name)
-#     @messages.count method_name
-#   end
-#
-#   def method_missing(method_name, *args, &block)
-#     @messages << method_name
-#     @object.send method_name, *args, &block
-#   end
-#
-# end
 
 # The proxy object should pass the following Koan:
 #
